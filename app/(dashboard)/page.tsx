@@ -1,12 +1,14 @@
-import { GetFormStats } from "@/actions/form";
+import { GetFormStats, GetForms } from "@/actions/form";
+import CreateFormBtn from "@/components/CreateFormBtn";
+import { FormCard } from "@/components/FormCard";
 import StatsCard from "@/components/StatsCard";
+import { Separator } from "@/components/ui/separator";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Suspense } from "react";
-import { LuView } from "react-icons/lu";
 import { FaWpforms } from "react-icons/fa";
 import { HiCursorClick } from "react-icons/hi";
+import { LuView } from "react-icons/lu";
 import { TbArrowBounce } from "react-icons/tb";
-import { Separator } from "@/components/ui/separator";
-import CreateFormBtn from "@/components/CreateFormBtn";
 
 export default function Home() {
     return (
@@ -19,6 +21,13 @@ export default function Home() {
             <Separator className="my-6" />
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 <CreateFormBtn />
+                <Suspense
+                    fallback={[1, 2, 3, 4].map((el) => (
+                        <FormCardSkeleton key={el} />
+                    ))}
+                >
+                    <FormCards />
+                </Suspense>
             </div>
         </div>
     );
@@ -70,5 +79,21 @@ function StatsCards(props: StatsCardsProps) {
                 className="shadow-md shadow-red-600"
             />
         </div>
+    );
+}
+
+function FormCardSkeleton() {
+    return (
+        <Skeleton className="border-2 border-primary-/20 h-[190px] w-full" />
+    );
+}
+async function FormCards() {
+    const forms = await GetForms();
+    return (
+        <>
+            {forms.map((form) => (
+                <FormCard key={form.id} form={form} />
+            ))}
+        </>
     );
 }

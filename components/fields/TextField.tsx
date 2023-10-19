@@ -9,6 +9,7 @@ import {
 import { Form } from "@prisma/client";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
+import z from "zod";
 
 const type: ElementsType = "TextField";
 
@@ -18,6 +19,13 @@ const extraAttributes = {
     required: false,
     placeholder: "Placeholder",
 };
+
+const propertiesSchema = z.object({
+    label: z.string().min(2).max(50),
+    helperText: z.string().max(200),
+    required: z.boolean().default(false),
+    placeholder: z.string().max(50),
+});
 
 export const TextFieldFormElement: FormElement = {
     type,
@@ -32,7 +40,7 @@ export const TextFieldFormElement: FormElement = {
     },
     designerComponent: DesignerComponent,
     formComponent: () => <div>Form Component</div>,
-    propertiesComponent: () => <div>Properties Component</div>,
+    propertiesComponent: PropertiesComponent,
 };
 
 type CustomInstance = FormElementInstance & {
@@ -60,4 +68,13 @@ function DesignerComponent({
             )}
         </div>
     );
+}
+
+function PropertiesComponent({
+    elementInstance,
+}: {
+    elementInstance: FormElementInstance;
+}) {
+    const element = elementInstance as CustomInstance;
+    return <div>Form Properties foe {element.extraAttributes.label}</div>;
 }

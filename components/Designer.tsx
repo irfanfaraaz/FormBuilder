@@ -19,7 +19,8 @@ import { Button } from "./ui/button";
 import { BiSolidTrash } from "react-icons/bi";
 
 const Designer = () => {
-    const { elements, addElement } = useDesigner();
+    const { elements, addElement, selectedElement, setSelectedElement } =
+        useDesigner();
     const droppable = useDroppable({
         id: "designer-drop-area",
         data: {
@@ -44,7 +45,12 @@ const Designer = () => {
     });
     return (
         <div className="flex w-full h-full">
-            <div className="p-4 w-full">
+            <div
+                className="p-4 w-full"
+                onClick={() => {
+                    if (selectedElement) setSelectedElement(null);
+                }}
+            >
                 <div
                     ref={droppable.setNodeRef}
                     className={cn(
@@ -80,7 +86,8 @@ const Designer = () => {
 };
 
 function DesignerElementWrapper({ element }: { element: FormElementInstance }) {
-    const { removeElement } = useDesigner();
+    const { removeElement, selectedElement, setSelectedElement } =
+        useDesigner();
     const [mouseIsOver, setMouseIsOver] = useState(false);
     const topHalf = useDroppable({
         id: element.id + "-top",
@@ -122,6 +129,10 @@ function DesignerElementWrapper({ element }: { element: FormElementInstance }) {
             onMouseLeave={() => {
                 setMouseIsOver(false);
             }}
+            onClick={(e) => {
+                e.stopPropagation();
+                setSelectedElement(element);
+            }}
         >
             <div
                 ref={topHalf.setNodeRef}
@@ -136,9 +147,9 @@ function DesignerElementWrapper({ element }: { element: FormElementInstance }) {
                     <div className="absolute right-0 h-full">
                         <Button
                             variant={"outline"}
-                            onClick={(event) => {
+                            onClick={(e) => {
                                 if (!draggable.isDragging) {
-                                    event.preventDefault();
+                                    e.stopPropagation();
                                     removeElement(element.id);
                                 }
                             }}

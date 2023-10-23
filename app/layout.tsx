@@ -12,6 +12,9 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
     title: "FormBuilder",
     description: "",
+    icons: {
+        icon: "/public/logo-color.svg",
+    },
 };
 
 export default function RootLayout({

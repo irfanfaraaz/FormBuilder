@@ -30,10 +30,11 @@ const FormDetailPage = async ({ params }: { params: { id: string } }) => {
     }
     const { visits, submissions } = form;
     let submissionRate = 0;
+    let bounceRate = 0;
     if (visits > 0) {
         submissionRate = (submissions * 100) / visits;
     }
-    const bounceRate = 100 - submissionRate;
+    bounceRate = 100 - submissionRate;
     return (
         <>
             <div className="py-10  border-b border-muted">
@@ -78,7 +79,7 @@ const FormDetailPage = async ({ params }: { params: { id: string } }) => {
                     title="Bounce Rate"
                     icon={<TbArrowBounce className="text-red-600 " />}
                     helperText="Visits that leave without submitting"
-                    value={submissionRate.toLocaleString() + "%" || ""}
+                    value={bounceRate.toLocaleString() + "%" || ""}
                     loading={false}
                     className="shadow-md shadow-red-600"
                 />

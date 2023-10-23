@@ -74,7 +74,7 @@ function StatsCards(props: StatsCardsProps) {
                 title="Bounce Rate"
                 icon={<TbArrowBounce className="text-red-600 " />}
                 helperText="Visits that leave without submitting"
-                value={data?.submissionRate.toLocaleString() + "%" || ""}
+                value={data?.bounceRate.toLocaleString() + "%" || ""}
                 loading={loading}
                 className="shadow-md shadow-red-600"
             />

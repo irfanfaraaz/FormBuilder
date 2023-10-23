@@ -1,25 +1,11 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect } from "react";
-import { useForm } from "react-hook-form";
 import { RiSeparator } from "react-icons/ri";
-import z from "zod";
 import {
     ElementsType,
     FormElement,
     FormElementInstance,
 } from "../FormElements";
-import useDesigner from "../hooks/useDesigner";
-import {
-    Form,
-    FormControl,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
-} from "../ui/form";
-import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Separator } from "../ui/separator";
 

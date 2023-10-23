@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { MdTextFields } from "react-icons/md";
+import { Bs123 } from "react-icons/bs";
 import z from "zod";
 import {
     ElementsType,
@@ -26,13 +26,13 @@ import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Switch } from "../ui/switch";
 
-const type: ElementsType = "TextField";
+const type: ElementsType = "NumberField";
 
 const extraAttributes = {
-    label: "Text Field",
+    label: "Number Field",
     helperText: "Helper Text",
     required: false,
-    placeholder: "Placeholder",
+    placeholder: "0",
 };
 
 const propertiesSchema = z.object({
@@ -42,7 +42,7 @@ const propertiesSchema = z.object({
     placeholder: z.string().max(50),
 });
 
-export const TextFieldFormElement: FormElement = {
+export const NumberFieldFormElement: FormElement = {
     type,
     construct: (id: string) => ({
         id,
@@ -50,8 +50,8 @@ export const TextFieldFormElement: FormElement = {
         extraAttributes,
     }),
     designerBtnElement: {
-        icon: MdTextFields,
-        label: "Text Field",
+        icon: Bs123,
+        label: "Number Field",
     },
     designerComponent: DesignerComponent,
     formComponent: FormComponent,
@@ -86,7 +86,7 @@ function DesignerComponent({
                 {label}
                 {required && "*"}
             </Label>
-            <Input readOnly disabled placeholder={placeholder} />
+            <Input readOnly disabled type="number" placeholder={placeholder} />
             {helperText && (
                 <p className="text-muted-foreground text-[0.8rem]">
                     {helperText}
@@ -122,12 +122,13 @@ function FormComponent({
                 {required && "*"}
             </Label>
             <Input
+                type="number"
                 className={cn(error && "border-red-500")}
                 placeholder={placeholder}
                 onChange={(e) => setValue(e.target.value)}
                 onBlur={(e) => {
                     if (!submitValue) return;
-                    const valid = TextFieldFormElement.validate(
+                    const valid = NumberFieldFormElement.validate(
                         element,
                         e.target.value
                     );

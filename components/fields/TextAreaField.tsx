@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { MdTextFields } from "react-icons/md";
+import { BsTextareaResize } from "react-icons/bs";
 import z from "zod";
 import {
     ElementsType,
@@ -24,15 +24,18 @@ import {
 } from "../ui/form";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
+import { Slider } from "../ui/slider";
 import { Switch } from "../ui/switch";
+import { Textarea } from "../ui/textarea";
 
-const type: ElementsType = "TextField";
+const type: ElementsType = "TextAreaField";
 
 const extraAttributes = {
-    label: "Text Field",
+    label: "Text area",
     helperText: "Helper Text",
     required: false,
     placeholder: "Placeholder",
+    rows: 3,
 };
 
 const propertiesSchema = z.object({
@@ -40,9 +43,10 @@ const propertiesSchema = z.object({
     helperText: z.string().max(200),
     required: z.boolean().default(false),
     placeholder: z.string().max(50),
+    rows: z.number().min(1).max(10),
 });
 
-export const TextFieldFormElement: FormElement = {
+export const TextAreaFieldFormElement: FormElement = {
     type,
     construct: (id: string) => ({
         id,
@@ -50,8 +54,8 @@ export const TextFieldFormElement: FormElement = {
         extraAttributes,
     }),
     designerBtnElement: {
-        icon: MdTextFields,
-        label: "Text Field",
+        icon: BsTextareaResize,
+        label: "TextArea Field",
     },
     designerComponent: DesignerComponent,
     formComponent: FormComponent,
@@ -78,7 +82,7 @@ function DesignerComponent({
     elementInstance: FormElementInstance;
 }) {
     const element = elementInstance as CustomInstance;
-    const { label, required, placeholder, helperText } =
+    const { label, required, placeholder, helperText, rows } =
         element.extraAttributes;
     return (
         <div className="flex flex-col gap-2 w-full">
@@ -86,7 +90,7 @@ function DesignerComponent({
                 {label}
                 {required && "*"}
             </Label>
-            <Input readOnly disabled placeholder={placeholder} />
+            <Textarea readOnly disabled placeholder={placeholder} />
             {helperText && (
                 <p className="text-muted-foreground text-[0.8rem]">
                     {helperText}
@@ -113,7 +117,7 @@ function FormComponent({
     useEffect(() => {
         setError(isInvalid === true);
     }, [isInvalid]);
-    const { label, required, placeholder, helperText } =
+    const { label, required, placeholder, helperText, rows } =
         element.extraAttributes;
     return (
         <div className="flex flex-col gap-2 w-full">
@@ -121,13 +125,14 @@ function FormComponent({
                 {label}
                 {required && "*"}
             </Label>
-            <Input
+            <Textarea
                 className={cn(error && "border-red-500")}
+                rows={rows}
                 placeholder={placeholder}
                 onChange={(e) => setValue(e.target.value)}
                 onBlur={(e) => {
                     if (!submitValue) return;
-                    const valid = TextFieldFormElement.validate(
+                    const valid = TextAreaFieldFormElement.validate(
                         element,
                         e.target.value
                     );
@@ -167,6 +172,7 @@ function PropertiesComponent({
             helperText: element.extraAttributes.helperText,
             required: element.extraAttributes.required,
             placeholder: element.extraAttributes.placeholder,
+            rows: element.extraAttributes.rows,
         },
     });
 
@@ -175,7 +181,7 @@ function PropertiesComponent({
     }, [element, form]);
 
     function applyChanges(values: propertiesFormSchemaType) {
-        const { label, helperText, placeholder, required } = values;
+        const { label, helperText, placeholder, required, rows } = values;
         updateElement(element.id, {
             ...element,
             extraAttributes: {
@@ -183,6 +189,7 @@ function PropertiesComponent({
                 helperText,
                 placeholder,
                 required,
+                rows,
             },
         });
     }
@@ -253,6 +260,31 @@ function PropertiesComponent({
                                     onKeyDown={(e) => {
                                         if (e.key === "Enter")
                                             e.currentTarget.blur();
+                                    }}
+                                />
+                            </FormControl>
+                            <FormDescription>
+                                The helper text of the field. <br />
+                                It will be displayed below the field.
+                            </FormDescription>
+                            <FormMessage />
+                        </FormItem>
+                    )}
+                />
+                <FormField
+                    control={form.control}
+                    name="rows"
+                    render={({ field }) => (
+                        <FormItem>
+                            <FormLabel>Rows {form.watch("rows")}</FormLabel>
+                            <FormControl>
+                                <Slider
+                                    defaultValue={[field.value]}
+                                    min={1}
+                                    max={10}
+                                    step={1}
+                                    onValueChange={(value) => {
+                                        field.onChange(value[0]);
                                     }}
                                 />
                             </FormControl>

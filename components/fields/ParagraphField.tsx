@@ -1,34 +1,25 @@
 "use client";
 
-import { MdTextFields } from "react-icons/md";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { BsTextParagraph } from "react-icons/bs";
+import z from "zod";
 import {
     ElementsType,
     FormElement,
     FormElementInstance,
-    FormElements,
-    SubmitFunction,
 } from "../FormElements";
-import { Label } from "../ui/label";
-import { Input } from "../ui/input";
-import z from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect, useState } from "react";
 import useDesigner from "../hooks/useDesigner";
 import {
     Form,
     FormControl,
-    FormLabel,
-    FormDescription,
-    FormItem,
-    FormMessage,
     FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
 } from "../ui/form";
-import { Switch } from "../ui/switch";
-import { cn } from "@/lib/utils";
-import { LuHeading1 } from "react-icons/lu";
-import { TextFieldFormElement } from "./TextField";
-import { BsTextParagraph } from "react-icons/bs";
+import { Label } from "../ui/label";
 import { Textarea } from "../ui/textarea";
 
 const type: ElementsType = "ParagraphField";

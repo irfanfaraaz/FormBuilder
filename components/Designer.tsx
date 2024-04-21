@@ -140,6 +140,9 @@ function Designer() {
                 onClick={() => {
                     if (selectedElement) setSelectedElement(null);
                 }}
+                onKeyDown={() => {
+                    if (selectedElement) setSelectedElement(null);
+                }}
             >
                 <div
                     ref={droppable.setNodeRef}
@@ -226,6 +229,11 @@ function DesignerElementWrapper({ element }: { element: FormElementInstance }) {
             onClick={(e) => {
                 e.stopPropagation();
                 setSelectedElement(element);
+            }}
+            onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                    setSelectedElement(element);
+                }
             }}
         >
             <div
